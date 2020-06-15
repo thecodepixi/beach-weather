@@ -9,12 +9,9 @@ export default class WeatherForm extends React.Component {
   };
 
   handleChange = (e) => {
-    this.setState(
-      {
-        [e.target.name]: e.target.value,
-      },
-      () => console.log(this.state)
-    );
+    this.setState({
+      [e.target.name]: e.target.value,
+    });
   };
 
   handleSubmit = (e) => {

@@ -47,25 +47,26 @@ export default class WeatherSearch extends React.Component {
     })
       .then((resp) => resp.json())
       .then((data) => {
-        console.log(data[0]);
-        this.setState(
-          {
-            ...this.state,
-            lat: data[0].lat,
-            lon: data[0].lon,
-          },
-          () => console.log(this.state)
-        );
+        this.setState({
+          ...this.state,
+          lat: data[0].lat,
+          lon: data[0].lon,
+        });
       })
-      // .then(() => {
-      //   fetch(
-      //     `${CLIMACELL_URL}&lat=${this.state.lat}&lon=${this.state.lon}${FIELDS}`
-      //   )
-      //     .then((resp) => resp.json())
-      //     .then((data) => {
-      //       console.log(data);
-      //     });
-      // })
+      //get data from climcell. currently getting cors rejection
+      .then(() => {
+        fetch(
+          `${CLIMACELL_URL}&lat=${this.state.lat}&lon=${this.state.lon}${FIELDS}`,
+          {
+            Accept: '*/*',
+            'Access-Control-Allow-Origin': '*',
+          }
+        )
+          .then((resp) => resp.json())
+          .then((data) => {
+            console.log(data);
+          });
+      })
       .catch((err) => console.error(err));
   };
 
