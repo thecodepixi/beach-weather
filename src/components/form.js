@@ -22,7 +22,7 @@ export default class WeatherForm extends React.Component {
   render() {
     return (
       <form id='search-form' onSubmit={this.handleSubmit}>
-        <input
+        <TextField
           type='text'
           id='city'
           name='city'
@@ -31,7 +31,7 @@ export default class WeatherForm extends React.Component {
           onChange={this.handleChange}
         />
         {this.state.city}
-        <input
+        <TextField
           type='text'
           id='state'
           name='state'
@@ -40,7 +40,7 @@ export default class WeatherForm extends React.Component {
           onChange={this.handleChange}
         />
         {this.state.state}
-        <input
+        <TextField
           type='text'
           id='postal_code'
           name='postal_code'
@@ -49,7 +49,9 @@ export default class WeatherForm extends React.Component {
           onChange={this.handleChange}
         />
         {this.state.postal_code}
-        <button type='submit'>Submit</button>
+        <FormControl>
+          <Button type='submit'>Submit</Button>
+        </FormControl>
       </form>
     );
   }
