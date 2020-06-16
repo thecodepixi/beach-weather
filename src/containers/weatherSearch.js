@@ -23,6 +23,7 @@ export default class WeatherSearch extends React.Component {
       weather_code: undefined,
     },
     beach_day: undefined,
+    reason: undefined,
   };
 
   submitLocation = (location) => {
@@ -57,9 +58,20 @@ export default class WeatherSearch extends React.Component {
         beach_day: true,
       }));
     } else {
+      let reason;
+      if (weather.temp > 95) {
+        reason = "it's too hot";
+      } else if (weather.temp < 75) {
+        reason = "it's too cold";
+      }
+      if (weather.precipitation_type !== 'none') {
+        reason += ` and there's ${weather.precipitation_type}`;
+      }
+      reason += '.';
       this.setState((prevState) => ({
         ...prevState,
         beach_day: false,
+        reason: reason,
       }));
     }
   };
@@ -132,6 +144,7 @@ export default class WeatherSearch extends React.Component {
           location={this.state.location}
           beach_day={this.state.beach_day}
           weather={this.state.weather}
+          reason={this.state.reason}
         />
       </>
     );

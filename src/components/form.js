@@ -37,7 +37,6 @@ export default class WeatherForm extends React.Component {
         />
         {this.state.city}
         <TextField
-          required
           type='text'
           id='state'
           name='state'
@@ -47,7 +46,6 @@ export default class WeatherForm extends React.Component {
         />
         {this.state.state}
         <TextField
-          required
           type='text'
           id='postal_code'
           name='postal_code'

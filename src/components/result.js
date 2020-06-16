@@ -9,7 +9,7 @@ const GoodWeather = (props) => {
     <div className='weather-result' id='good-weather'>
       <h1>It's perfect beach weather in {props.location.city}!</h1>
       <h2>Here's the current weather: </h2>
-      <h3>Temperature: {props.weather.temp}</h3>
+      <h3>Temperature: {props.weather.temp} F</h3>
       <h3>
         Weather Conditions: {formatWeatherCode(props.weather.weather_code)}
       </h3>
@@ -20,9 +20,12 @@ const GoodWeather = (props) => {
 const BadWeather = (props) => {
   return (
     <div className='weather-result' id='bad-weather'>
-      <h1>Today isn't the best beach day in {props.location.city}.</h1>
+      <h1>
+        Today isn't the best beach day in {props.location.city} because{' '}
+        {props.reason}
+      </h1>
       <h2>Here's the current weather: </h2>
-      <h3>Temperature: {props.weather.temp}</h3>
+      <h3>Temperature: {props.weather.temp} F</h3>
       <h3>
         Weather Conditions: {formatWeatherCode(props.weather.weather_code)}
       </h3>
@@ -37,7 +40,13 @@ const Result = (props) => {
   if (props.beach_day === true) {
     return <GoodWeather location={props.location} weather={props.weather} />;
   } else if (props.beach_day === false) {
-    return <BadWeather location={props.location} weather={props.weather} />;
+    return (
+      <BadWeather
+        location={props.location}
+        weather={props.weather}
+        reason={props.reason}
+      />
+    );
   } else {
     return null;
   }
