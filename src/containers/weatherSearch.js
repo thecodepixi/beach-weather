@@ -1,6 +1,7 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import WeatherForm from '../components/form';
+import Result from '../components/result';
 
 const CLIMACELL_URL = `https://api.climacell.co/v3/weather/realtime?apikey=${process.env.REACT_APP_CLIMACELL}`;
 const CLIMACELL_FIELDS =
@@ -26,14 +27,14 @@ export default class WeatherSearch extends React.Component {
 
   submitLocation = (location) => {
     this.setState(
-      {
-        ...this.state,
+      (prevState) => ({
+        ...prevState,
         location: {
           state: location.state,
           city: location.city,
           postal_code: location.postal_code,
         },
-      },
+      }),
       () =>
         this.getWeatherData([
           this.state.location.city,
@@ -41,6 +42,26 @@ export default class WeatherSearch extends React.Component {
           this.state.location.postal_code,
         ])
     );
+  };
+
+  determineBeachWeather = (weather) => {
+    let acceptableWeatherCodes = ['clear', 'mostly_clear', 'partly_cloudy'];
+    if (
+      weather.temp > 75 &&
+      weather.temp < 95 &&
+      weather.precipitation_type === 'none' &&
+      acceptableWeatherCodes.includes(weather.weather_code)
+    ) {
+      this.setState((prevState) => ({
+        ...prevState,
+        beach_day: true,
+      }));
+    } else {
+      this.setState((prevState) => ({
+        ...prevState,
+        beach_day: false,
+      }));
+    }
   };
 
   getWeatherData = (location) => {
@@ -52,13 +73,22 @@ export default class WeatherSearch extends React.Component {
     })
       .then((resp) => resp.json())
       .then((data) => {
-        this.setState({
-          ...this.state,
+        // update state with latitude and longitude
+        this.setState((prevState) => ({
+          ...prevState,
+          location: {
+            ...prevState.location,
+            //if user provided a city name, leave it alone, if not replace with the city name from LocationIQ
+            city:
+              prevState.location.city === ''
+                ? data[0].display_name.split(',')[0]
+                : prevState.location.city,
+          },
           lat: data[0].lat,
           lon: data[0].lon,
-        });
+        }));
       })
-      //get data from climcell. currently getting cors rejection error?
+      //get weather data from climcell
       .then(() => {
         fetch(
           CLIMACELL_URL +
@@ -67,16 +97,20 @@ export default class WeatherSearch extends React.Component {
         )
           .then((resp) => resp.json())
           .then((data) => {
+            // update state with weather info
             this.setState(
-              {
-                ...this.state,
+              (prevState) => ({
+                ...prevState,
                 weather: {
                   temp: data.temp.value,
                   precipitation_type: data.precipitation_type.value,
                   weather_code: data.weather_code.value,
                 },
-              },
-              () => console.log(this.state.weather)
+              }),
+              // use setState callback to determine beach weather
+              () => {
+                this.determineBeachWeather(this.state.weather);
+              }
             );
           })
           .catch((err) => console.error(err));
@@ -94,16 +128,11 @@ export default class WeatherSearch extends React.Component {
           getWeatherData={this.getWeatherData}
           submitLocation={this.submitLocation}
         />
-        {this.state.weather.temp !== undefined ? (
-          <p>
-            {this.state.weather.temp}
-            <br />
-            {this.state.weather.precipitation_type}
-            <br />
-            {this.state.weather.weather_code}
-            <br />
-          </p>
-        ) : null}
+        <Result
+          location={this.state.location}
+          beach_day={this.state.beach_day}
+          weather={this.props.weather}
+        />
       </>
     );
   }
