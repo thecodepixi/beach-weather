@@ -102,7 +102,7 @@ export default class WeatherSearch extends React.Component {
               (prevState) => ({
                 ...prevState,
                 weather: {
-                  temp: data.temp.value,
+                  temp: Math.ceil(Math.round(data.temp.value)),
                   precipitation_type: data.precipitation_type.value,
                   weather_code: data.weather_code.value,
                 },
@@ -131,7 +131,7 @@ export default class WeatherSearch extends React.Component {
         <Result
           location={this.state.location}
           beach_day={this.state.beach_day}
-          weather={this.props.weather}
+          weather={this.state.weather}
         />
       </>
     );
