@@ -48,8 +48,8 @@ export default class WeatherSearch extends React.Component {
   determineBeachWeather = (weather) => {
     let acceptableWeatherCodes = ['clear', 'mostly_clear', 'partly_cloudy'];
     if (
-      weather.temp > 75 &&
-      weather.temp < 95 &&
+      weather.temp >= 75 &&
+      weather.temp <= 95 &&
       weather.precipitation_type === 'none' &&
       acceptableWeatherCodes.includes(weather.weather_code)
     ) {
@@ -131,8 +131,9 @@ export default class WeatherSearch extends React.Component {
   };
 
   render() {
+    console.log(this.state.weather);
     return (
-      <>
+      <div id='container'>
         <div id='search'>
           <Heading as='h1'>Is today a good beach day?</Heading>
           <WeatherForm
@@ -149,7 +150,7 @@ export default class WeatherSearch extends React.Component {
             reason={this.state.reason}
           />
         </div>
-      </>
+      </div>
     );
   }
 }

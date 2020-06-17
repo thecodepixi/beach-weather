@@ -8,7 +8,7 @@ const GoodWeather = (props) => {
   // Photo by Sean O. on Unsplash
   return (
     <div id='good-weather'>
-      <div class='result-text'>
+      <div className='result-text'>
         <h1>It's perfect beach weather in {props.location.city}!</h1>
         <h2>Here's the current weather: </h2>
         <h3>Temperature: {props.weather.temp} F</h3>
@@ -24,7 +24,7 @@ const BadWeather = (props) => {
   // Photo by Samuel Ferrara on Unsplash
   return (
     <div id='bad-weather'>
-      <div class='result-text'>
+      <div className='result-text'>
         <h1>
           Today isn't the best beach day in {props.location.city} because{' '}
           {props.reason}
