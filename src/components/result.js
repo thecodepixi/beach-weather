@@ -5,8 +5,9 @@ const formatWeatherCode = (code) => {
 };
 
 const GoodWeather = (props) => {
+  // Photo by Sean O. on Unsplash
   return (
-    <div className='weather-result' id='good-weather'>
+    <div id='good-weather'>
       <h1>It's perfect beach weather in {props.location.city}!</h1>
       <h2>Here's the current weather: </h2>
       <h3>Temperature: {props.weather.temp} F</h3>
@@ -18,8 +19,9 @@ const GoodWeather = (props) => {
 };
 
 const BadWeather = (props) => {
+  // Photo by Samuel Ferrara on Unsplash
   return (
-    <div className='weather-result' id='bad-weather'>
+    <div id='bad-weather'>
       <h1>
         Today isn't the best beach day in {props.location.city} because{' '}
         {props.reason}

@@ -1,5 +1,5 @@
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
+import { Heading } from 'theme-ui';
 import WeatherForm from '../components/form';
 import Result from '../components/result';
 
@@ -133,19 +133,22 @@ export default class WeatherSearch extends React.Component {
   render() {
     return (
       <>
-        <Typography variant='h1' component='h1'>
-          Is today a good beach day?
-        </Typography>
-        <WeatherForm
-          getWeatherData={this.getWeatherData}
-          submitLocation={this.submitLocation}
-        />
-        <Result
-          location={this.state.location}
-          beach_day={this.state.beach_day}
-          weather={this.state.weather}
-          reason={this.state.reason}
-        />
+        <div id='search'>
+          <Heading as='h1'>Is today a good beach day?</Heading>
+          <WeatherForm
+            getWeatherData={this.getWeatherData}
+            submitLocation={this.submitLocation}
+          />
+        </div>
+
+        <div id='result'>
+          <Result
+            location={this.state.location}
+            beach_day={this.state.beach_day}
+            weather={this.state.weather}
+            reason={this.state.reason}
+          />
+        </div>
       </>
     );
   }

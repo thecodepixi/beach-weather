@@ -1,11 +1,12 @@
 import React from 'react';
-import { FormControl, TextField, Button } from '@material-ui/core';
+import { Box, Label, Input, Button, Alert } from 'theme-ui';
 
 export default class WeatherForm extends React.Component {
   state = {
     city: '',
     state: '',
     postal_code: '',
+    invalid_submission: false,
   };
 
   handleChange = (e) => {
@@ -16,48 +17,66 @@ export default class WeatherForm extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    this.setState({
-      city: '',
-      state: '',
-      postal_code: '',
-    });
-    this.props.submitLocation(this.state);
+    if (
+      this.state.city === '' &&
+      this.state.state === '' &&
+      this.state.postal_code === ''
+    ) {
+      this.setState((prevState) => ({
+        ...prevState,
+        invalid_submission: true,
+      }));
+      return;
+    } else {
+      this.props.submitLocation(this.state);
+      this.setState({
+        city: '',
+        state: '',
+        postal_code: '',
+        invalid_submission: false,
+      });
+    }
   };
 
   render() {
     return (
-      <form id='search-form' onSubmit={this.handleSubmit}>
-        <TextField
-          type='text'
-          id='city'
-          name='city'
-          value={this.state.city}
-          label='City'
-          onChange={this.handleChange}
-        />
-        {this.state.city}
-        <TextField
-          type='text'
-          id='state'
-          name='state'
-          value={this.state.state}
-          label='State'
-          onChange={this.handleChange}
-        />
-        {this.state.state}
-        <TextField
-          type='text'
-          id='postal_code'
-          name='postal_code'
-          value={this.state.postal_code}
-          label='Postal Code'
-          onChange={this.handleChange}
-        />
-        {this.state.postal_code}
-        <FormControl>
-          <Button type='submit'>Submit</Button>
-        </FormControl>
-      </form>
+      <>
+        {this.state.invalid_submission ? (
+          <Alert backgroundColor='accent'>Please fill out the form!</Alert>
+        ) : null}
+        <Box as='form' id='search-form' onSubmit={this.handleSubmit}>
+          <Label htmlFor='city'>City: </Label>
+          <Input
+            type='text'
+            id='city'
+            name='city'
+            value={this.state.city}
+            label='City'
+            onChange={this.handleChange}
+          />
+          <Label htmlFor='state'>State: </Label>
+          <Input
+            type='text'
+            id='state'
+            name='state'
+            value={this.state.state}
+            label='State'
+            onChange={this.handleChange}
+          />
+          <Label htmlFor='postal_code'>Postal Code: </Label>
+          <Input
+            type='text'
+            id='postal_code'
+            name='postal_code'
+            value={this.state.postal_code}
+            label='Postal Code'
+            onChange={this.handleChange}
+          />
+          <Button type='submit' backgroundColor='secondary'>
+            Submit
+          </Button>
+        </Box>
+      </>
     );
   }
 }
