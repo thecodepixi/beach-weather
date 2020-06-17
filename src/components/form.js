@@ -72,7 +72,7 @@ export default class WeatherForm extends React.Component {
             label='Postal Code'
             onChange={this.handleChange}
           />
-          <Button type='submit' backgroundColor='secondary'>
+          <Button id='submit' type='submit' backgroundColor='secondary'>
             Submit
           </Button>
         </Box>
