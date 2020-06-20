@@ -7,15 +7,16 @@ const formatWeatherCode = (code) => {
 const GoodWeather = (props) => {
   // Photo by Sean O. on Unsplash
   return (
-    <div id='good-weather'>
-      <div className='result-text'>
-        <h1>It's perfect beach weather in {props.location.city}!</h1>
-        <h2>Here's the current weather: </h2>
-        <h3>Temperature: {props.weather.temp} F</h3>
-        <h3>
-          Weather Conditions: {formatWeatherCode(props.weather.weather_code)}
-        </h3>
-      </div>
+    <div className='result-text'>
+      <h2>
+        It's perfect beach weather in{' '}
+        <span id='city'>{props.location.city}</span>!
+      </h2>
+      <h3>Here's the current weather: </h3>
+      <h4>Temperature: {props.weather.temp} F</h4>
+      <h4>
+        Weather Conditions: {formatWeatherCode(props.weather.weather_code)}
+      </h4>
     </div>
   );
 };
@@ -23,21 +24,19 @@ const GoodWeather = (props) => {
 const BadWeather = (props) => {
   // Photo by Samuel Ferrara on Unsplash
   return (
-    <div id='bad-weather'>
-      <div className='result-text'>
-        <h1>
-          Today isn't the best beach day in {props.location.city} because{' '}
-          {props.reason}
-        </h1>
-        <h2>Here's the current weather: </h2>
-        <h3>Temperature: {props.weather.temp} F</h3>
-        <h3>
-          Weather Conditions: {formatWeatherCode(props.weather.weather_code)}
-        </h3>
-        {props.weather.precipitation_type !== 'none' ? (
-          <h3>Precipitation: {props.weather.precipitation_type}</h3>
-        ) : null}
-      </div>
+    <div className='result-text'>
+      <h1>
+        Today isn't the best beach day in{' '}
+        <span id='city'>{props.location.city}</span> because {props.reason}
+      </h1>
+      <h2>Here's the current weather: </h2>
+      <h3>Temperature: {props.weather.temp} F</h3>
+      <h3>
+        Weather Conditions: {formatWeatherCode(props.weather.weather_code)}
+      </h3>
+      {props.weather.precipitation_type !== 'none' ? (
+        <h3>Precipitation: {props.weather.precipitation_type}</h3>
+      ) : null}
     </div>
   );
 };

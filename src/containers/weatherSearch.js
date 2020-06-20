@@ -59,13 +59,17 @@ export default class WeatherSearch extends React.Component {
       }));
     } else {
       let reason;
+
+      if (!acceptableWeatherCodes.includes(weather.weather_code)) {
+        reason = `it's ${weather.weather_code.split('_').join(' ')}`;
+      }
       if (weather.temp > 95) {
         reason = "it's too hot";
       } else if (weather.temp < 75) {
         reason = "it's too cold";
       }
       if (weather.precipitation_type !== 'none') {
-        reason += ` and there's ${weather.precipitation_type}`;
+        reason = ` there's ${weather.precipitation_type}`;
       }
       reason += '.';
       this.setState((prevState) => ({
@@ -130,19 +134,41 @@ export default class WeatherSearch extends React.Component {
       .catch((err) => console.error(err));
   };
 
+  clearState = () => {
+    this.setState({
+      location: {
+        state: undefined,
+        city: undefined,
+        postal_code: undefined,
+      },
+      lat: undefined,
+      lon: undefined,
+      weather: {
+        temp: undefined,
+        precipitation_type: undefined,
+        weather_code: undefined,
+      },
+      beach_day: undefined,
+      reason: undefined,
+    });
+  };
+
   render() {
     console.log(this.state.weather);
     return (
       <div id='container'>
         <div id='search'>
-          <Heading as='h1'>Is today a good beach day?</Heading>
+          <Heading as='h1' id='header'>
+            Is today a good beach day?
+          </Heading>
           <WeatherForm
             getWeatherData={this.getWeatherData}
             submitLocation={this.submitLocation}
+            clearState={this.clearState}
           />
         </div>
 
-        <div id='result'>
+        <div id='result' className={this.state.beach_day ? 'good' : 'bad'}>
           <Result
             location={this.state.location}
             beach_day={this.state.beach_day}

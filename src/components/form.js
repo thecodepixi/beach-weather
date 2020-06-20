@@ -6,6 +6,7 @@ export default class WeatherForm extends React.Component {
     city: '',
     state: '',
     postal_code: '',
+    submitted: false,
     invalid_submission: false,
   };
 
@@ -29,13 +30,24 @@ export default class WeatherForm extends React.Component {
       return;
     } else {
       this.props.submitLocation(this.state);
-      this.setState({
-        city: '',
-        state: '',
-        postal_code: '',
+      this.setState((prevState) => ({
+        ...prevState,
+        submitted: true,
         invalid_submission: false,
-      });
+      }));
     }
+  };
+
+  resetSubmission = (e) => {
+    e.preventDefault();
+    this.setState((prevState) => ({
+      ...prevState,
+      submitted: false,
+      city: '',
+      state: '',
+      postal_code: '',
+    }));
+    this.props.clearState();
   };
 
   render() {
@@ -74,6 +86,13 @@ export default class WeatherForm extends React.Component {
           />
           <Button id='submit' type='submit' backgroundColor='secondary'>
             Submit
+          </Button>
+          <Button
+            id='reset'
+            onClick={this.resetSubmission}
+            backgroundColor='accent'
+          >
+            Reset Search
           </Button>
         </Box>
       </>
