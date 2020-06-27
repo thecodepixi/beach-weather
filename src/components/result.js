@@ -7,16 +7,22 @@ const formatWeatherCode = (code) => {
 const GoodWeather = (props) => {
   // Photo by Sean O. on Unsplash
   return (
-    <div className='result-text'>
+    <div id='result-text'>
       <h2>
         It's perfect beach weather in{' '}
         <span id='city'>{props.location.city}</span>!
       </h2>
-      <h3>Here's the current weather: </h3>
-      <h4>Temperature: {props.weather.temp} F</h4>
-      <h4>
-        Weather Conditions: {formatWeatherCode(props.weather.weather_code)}
-      </h4>
+      <h3>
+        <p>
+          Right now it's {props.weather.temp}F
+          {props.weather.temp !== props.weather.feels_like ? (
+            <span>
+              <br />( but it feels more like {props.weather.feels_like}F )
+            </span>
+          ) : null}{' '}
+        </p>
+        <p>and the sky is {formatWeatherCode(props.weather.weather_code)}.</p>
+      </h3>
     </div>
   );
 };
@@ -24,36 +30,35 @@ const GoodWeather = (props) => {
 const BadWeather = (props) => {
   // Photo by Samuel Ferrara on Unsplash
   return (
-    <div className='result-text'>
-      <h1>
+    <div id='result-text'>
+      <h2>
         Today isn't the best beach day in{' '}
-        <span id='city'>{props.location.city}</span> because {props.reason}
-      </h1>
-      <h2>Here's the current weather: </h2>
-      <h3>Temperature: {props.weather.temp} F</h3>
+        <span id='city'>{props.location.city}</span>.
+      </h2>
       <h3>
-        Weather Conditions: {formatWeatherCode(props.weather.weather_code)}
+        <p>
+          Right now it's {props.weather.temp}F
+          {props.weather.temp !== props.weather.feels_like ? (
+            <span>
+              <br />( but it feels more like {props.weather.feels_like}F )
+            </span>
+          ) : null}{' '}
+        </p>
+        <p>and the sky is {formatWeatherCode(props.weather.weather_code)}.</p>
       </h3>
-      {props.weather.precipitation_type !== 'none' ? (
-        <h3>Precipitation: {props.weather.precipitation_type}</h3>
-      ) : null}
     </div>
   );
 };
 
 const Result = (props) => {
-  if (props.beach_day === true) {
-    return <GoodWeather location={props.location} weather={props.weather} />;
-  } else if (props.beach_day === false) {
-    return (
-      <BadWeather
-        location={props.location}
-        weather={props.weather}
-        reason={props.reason}
-      />
-    );
-  } else {
+  if (props.beach_day === undefined) {
     return null;
+  } else {
+    return props.beach_day ? (
+      <GoodWeather location={props.location} weather={props.weather} />
+    ) : (
+      <BadWeather location={props.location} weather={props.weather} />
+    );
   }
 };
 

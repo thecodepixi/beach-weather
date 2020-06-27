@@ -5,11 +5,15 @@ body {
   margin: 0;
 }
 
+input {
+  padding: 4px;
+}
+
 #header {
-  font-family: 'Raleway', sans-serif;
   font-variant: small-caps;
   text-align: center;
   padding-top: 1rem;
+  font-size: 1.75em;
 }
 
 #container {
@@ -42,12 +46,32 @@ body {
 #result {
   grid-row-start: 2;
   grid-row-end: 3;
+  display: fleX;
+  justify-content: center;
   padding: 1rem;
   text-align: center;
   background-color: lightblue;
   border-radius: 6rem 6rem 0 0;
   border: 1px solid lightslategray;
   box-shadow: lightslategray 0px 0px 1rem;
+}
+
+#result-text {
+  width: 90%;
+  height: max-content;
+  margin: auto;
+  background-color: rgba(255, 255, 255, 0.4);
+  border-radius: 6rem;
+  padding: 2rem;
+  box-shadow: 0 0 3rem 0.5rem lightslategrey;
+  justify-content: center;
+  align-items: center;
+  text-shadow: white 0px 0px 1em;
+}
+
+#result-text h1 {
+  width: 75%;
+  margin: auto;
 }
 
 .good {
@@ -60,6 +84,7 @@ body {
   background: url('./images/badweather.jpg') no-repeat;
   background-size: cover;
   resize: both;
+  color: black;
 }
 
 @media screen and (min-width: 900px) {
@@ -81,6 +106,12 @@ body {
     grid-column-start: 2;
     grid-column-end: 3;
     padding: 2rem;
-    border-radius: 6rem 0 0 6rem;
+    border-radius: 5rem 0 0 5rem;
+  }
+
+  #result-text {
+    border-radius: 5rem;
+    width: 75%;
+    font-size: 1.25rem;
   }
 }

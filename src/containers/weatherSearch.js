@@ -5,7 +5,7 @@ import Result from '../components/result';
 
 const CLIMACELL_URL = `https://api.climacell.co/v3/weather/realtime?apikey=${process.env.REACT_APP_CLIMACELL}`;
 const CLIMACELL_FIELDS =
-  '&unit_system=us&fields=temp,weather_code,precipitation_type';
+  '&unit_system=us&fields=temp,weather_code,precipitation_type,feels_like';
 const locIQ_URL = `https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCIQ}&limit=1&q=`;
 
 export default class WeatherSearch extends React.Component {
@@ -23,7 +23,6 @@ export default class WeatherSearch extends React.Component {
       weather_code: undefined,
     },
     beach_day: undefined,
-    reason: undefined,
   };
 
   submitLocation = (location) => {
@@ -58,24 +57,9 @@ export default class WeatherSearch extends React.Component {
         beach_day: true,
       }));
     } else {
-      let reason;
-
-      if (!acceptableWeatherCodes.includes(weather.weather_code)) {
-        reason = `it's ${weather.weather_code.split('_').join(' ')}`;
-      }
-      if (weather.temp > 95) {
-        reason = "it's too hot";
-      } else if (weather.temp < 75) {
-        reason = "it's too cold";
-      }
-      if (weather.precipitation_type !== 'none') {
-        reason = ` there's ${weather.precipitation_type}`;
-      }
-      reason += '.';
       this.setState((prevState) => ({
         ...prevState,
         beach_day: false,
-        reason: reason,
       }));
     }
   };
@@ -119,6 +103,7 @@ export default class WeatherSearch extends React.Component {
                 ...prevState,
                 weather: {
                   temp: Math.ceil(Math.round(data.temp.value)),
+                  feels_like: Math.ceil(Math.round(data.feels_like.value)),
                   precipitation_type: data.precipitation_type.value,
                   weather_code: data.weather_code.value,
                 },
@@ -168,12 +153,18 @@ export default class WeatherSearch extends React.Component {
           />
         </div>
 
-        <div id='result' className={this.state.beach_day ? 'good' : 'bad'}>
+        <div
+          id='result'
+          className={
+            this.state.beach_day === undefined || this.state.beach_day
+              ? 'good'
+              : 'bad'
+          }
+        >
           <Result
             location={this.state.location}
             beach_day={this.state.beach_day}
             weather={this.state.weather}
-            reason={this.state.reason}
           />
         </div>
       </div>
