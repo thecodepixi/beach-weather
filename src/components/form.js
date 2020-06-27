@@ -28,6 +28,15 @@ export default class WeatherForm extends React.Component {
         invalid_submission: true,
       }));
       return;
+    } else if (
+      (this.state.state === '' && this.state.postal_code === '') ||
+      (this.state.city === '' && this.state.state === '')
+    ) {
+      this.setState((prevState) => ({
+        ...prevState,
+        invalid_submission: true,
+      }));
+      return;
     } else {
       this.props.submitLocation(this.state);
       this.setState((prevState) => ({
@@ -54,7 +63,10 @@ export default class WeatherForm extends React.Component {
     return (
       <>
         {this.state.invalid_submission ? (
-          <Alert backgroundColor='accent'>Please fill out the form!</Alert>
+          <Alert backgroundColor='accent'>
+            Please fill out the form with at least City and State, or State and
+            Postal Code information.
+          </Alert>
         ) : null}
         <Box as='form' id='search-form' onSubmit={this.handleSubmit}>
           <Label htmlFor='city'>City: </Label>

@@ -11,16 +11,16 @@ const locIQ_URL = `https://us1.locationiq.com/v1/search.php?key=${process.env.RE
 export default class WeatherSearch extends React.Component {
   state = {
     location: {
-      state: undefined,
-      city: undefined,
-      postal_code: undefined,
+      state: '',
+      city: '',
+      postal_code: '',
     },
-    lat: undefined,
-    lon: undefined,
+    lat: '',
+    lon: '',
     weather: {
-      temp: undefined,
-      precipitation_type: undefined,
-      weather_code: undefined,
+      temp: '',
+      precipitation_type: '',
+      weather_code: '',
     },
     beach_day: undefined,
   };
@@ -73,16 +73,25 @@ export default class WeatherSearch extends React.Component {
     })
       .then((resp) => resp.json())
       .then((data) => {
+        console.log(
+          'Data: ',
+          data[0].display_name.split(',')[
+            data[0].display_name.split(',').length - 5
+          ]
+        );
         // update state with latitude and longitude
+        let cityName =
+          this.state.location.city === ''
+            ? data[0].display_name.split(',')[
+                data[0].display_name.split(',').length - 5
+              ]
+            : this.state.location.city;
         this.setState((prevState) => ({
           ...prevState,
           location: {
             ...prevState.location,
             //if user provided a city name, leave it alone, if not replace with the city name from LocationIQ
-            city:
-              prevState.location.city === ''
-                ? data[0].display_name.split(',')[0]
-                : prevState.location.city,
+            city: cityName,
           },
           lat: data[0].lat,
           lon: data[0].lon,
