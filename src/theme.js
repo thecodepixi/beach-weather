@@ -25,16 +25,6 @@ export default {
     'gray': '#dfe3e8',
     'accent': '#f49342',
     'darken': '#00044c',
-    'modes': {
-      'dark': {
-        'text': '#3e4155',
-        'background': '#000639',
-        'primary': '#9c6ade',
-        'secondary': '#b4e1fa',
-        'highlight': '#b7ecec',
-        'muted': '#e6e6e6',
-      },
-    },
   },
   'styles': {
     'root': {
