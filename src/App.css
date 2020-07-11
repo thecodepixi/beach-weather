@@ -74,6 +74,10 @@ input {
   margin: auto;
 }
 
+#weather-type {
+  text-transform: capitalize;
+}
+
 .good {
   background: url('./images/goodweather.jpg') no-repeat;
   background-size: cover;
