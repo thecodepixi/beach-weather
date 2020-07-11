@@ -76,7 +76,6 @@ export default class WeatherSearch extends React.Component {
     })
       .then((resp) => resp.json())
       .then((data) => {
-        console.log(data);
         // update state with latitude and longitude
         let cityName =
           this.state.location.city === ''
