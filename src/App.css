@@ -60,13 +60,11 @@ input {
   width: 90%;
   height: max-content;
   margin: auto;
-  background-color: rgba(255, 255, 255, 0.4);
+  background-color: rgba(255, 255, 255, 0.5);
   border-radius: 6rem;
   padding: 2rem;
   box-shadow: 0 0 3rem 0.5rem lightslategrey;
-  justify-content: center;
-  align-items: center;
-  text-shadow: white 0px 0px 1em;
+  text-shadow: white 0px 0px 0.5em;
 }
 
 #result-text h1 {
