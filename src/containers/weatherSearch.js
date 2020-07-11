@@ -70,7 +70,6 @@ export default class WeatherSearch extends React.Component {
     }${
       location.postal_code !== '' ? '&postalcode=' + location.postal_code : ''
     }`;
-    console.log(locationQueryString);
     fetch(`${locIQ_URL}${locationQueryString}&format=json`, {
       'Content-type': 'application/json',
       'Access-Control-Allow-Origin': '*',
