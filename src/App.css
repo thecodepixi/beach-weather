@@ -29,18 +29,21 @@ input {
 }
 
 #search-form {
-  padding: 1.5rem;
-  padding-top: 0;
+  padding: 0 1.5rem;
 }
 
-#submit {
-  width: 100%;
-  margin-top: 1rem;
+#search-form input {
+  padding: 0 0.5em;
 }
 
-#reset {
-  width: 100%;
-  margin-top: 0.5rem;
+#form-buttons {
+  display: flex;
+  margin-top: 0.5em;
+  justify-content: space-between;
+}
+
+#form-buttons button {
+  width: 47%;
 }
 
 #result {
@@ -48,7 +51,8 @@ input {
   grid-row-end: 3;
   display: fleX;
   justify-content: center;
-  padding: 1rem;
+  padding: 0.5rem 0;
+  margin-top: 1em;
   text-align: center;
   background-color: lightblue;
   border-radius: 6rem 6rem 0 0;
@@ -63,13 +67,17 @@ input {
   background-color: rgba(255, 255, 255, 0.5);
   border-radius: 6rem;
   padding: 2rem;
-  box-shadow: 0 0 3rem 0.5rem lightslategrey;
+  box-shadow: 0 0 2.5em lightslategrey;
   text-shadow: white 0px 0px 0.5em;
 }
 
-#result-text h1 {
+#result-text h2 {
   width: 75%;
-  margin: auto;
+  margin: 0 auto;
+}
+
+#result-text p {
+  margin-bottom: 0;
 }
 
 #weather-type {
@@ -89,7 +97,7 @@ input {
   color: black;
 }
 
-@media screen and (min-width: 900px) {
+@media screen and (min-width: 750px) {
   #container {
     grid-template-columns: 25% auto;
     grid-template-rows: auto;
@@ -100,6 +108,10 @@ input {
     grid-row-end: unset;
     grid-column-start: 1;
     grid-column-end: 2;
+  }
+
+  #search input {
+    padding: 0.5em;
   }
 
   #result {
@@ -115,5 +127,17 @@ input {
     border-radius: 5rem;
     width: 75%;
     font-size: 1.25rem;
+    padding: 4em;
+  }
+
+  #form-buttons {
+    display: flex;
+    margin-top: 0.5em;
+    flex-direction: column;
+  }
+
+  #form-buttons button {
+    width: 100%;
+    margin-bottom: 0.5em;
   }
 }
