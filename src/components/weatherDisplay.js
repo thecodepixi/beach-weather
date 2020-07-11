@@ -14,6 +14,13 @@ export default ({ weather }) => {
       {weather.temp !== weather.feels_like ? (
         <p>but it feels more like {weather.feels_like}º F</p>
       ) : null}
+      <span>
+        {weather.temp > 95
+          ? "(it's too hot!)"
+          : weather.temp < 75
+          ? "(it's too cold!)"
+          : null}
+      </span>
       <WeatherCode code={weatherCode} />
     </h3>
   );

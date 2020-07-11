@@ -6,7 +6,7 @@ import Result from '../components/result';
 const CLIMACELL_URL = `https://api.climacell.co/v3/weather/realtime?apikey=${process.env.REACT_APP_CLIMACELL}`;
 const CLIMACELL_FIELDS =
   '&unit_system=us&fields=temp,weather_code,precipitation_type,feels_like';
-const locIQ_URL = `https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCIQ}&limit=1&q=`;
+const locIQ_URL = `https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCIQ}&limit=1`;
 
 export default class WeatherSearch extends React.Component {
   state = {
@@ -35,12 +35,7 @@ export default class WeatherSearch extends React.Component {
           postal_code: location.postal_code,
         },
       }),
-      () =>
-        this.getWeatherData([
-          this.state.location.city,
-          this.state.location.state,
-          this.state.location.postal_code,
-        ])
+      () => this.getWeatherData(this.state.location)
     );
   };
 
@@ -66,13 +61,23 @@ export default class WeatherSearch extends React.Component {
 
   getWeatherData = (location) => {
     //first get lat + lon from locIQ
-    let locationParams = location.filter((i) => i !== '').join('+');
-    fetch(`${locIQ_URL}${locationParams}&format=json`, {
+    let locationQueryString = `${
+      location.city !== '' ? '&city=' + location.city.split(' ').join('+') : ''
+    }${
+      location.state !== ''
+        ? '&state=' + location.state.split(' ').join('+')
+        : ''
+    }${
+      location.postal_code !== '' ? '&postalcode=' + location.postal_code : ''
+    }`;
+    console.log(locationQueryString);
+    fetch(`${locIQ_URL}${locationQueryString}&format=json`, {
       'Content-type': 'application/json',
       'Access-Control-Allow-Origin': '*',
     })
       .then((resp) => resp.json())
       .then((data) => {
+        console.log(data);
         // update state with latitude and longitude
         let cityName =
           this.state.location.city === ''
