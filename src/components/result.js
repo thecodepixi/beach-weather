@@ -28,8 +28,16 @@ const VampireWeather = ({ location }) => {
   );
 };
 
+const BadVampireWeather = ({ location }) => {
+  return (
+    <h2>
+      It's a bad day to be a Vampire in <span id='city'>{location.city}</span>.
+    </h2>
+  );
+};
+
 const Result = (props) => {
-  if (props.beach_day) {
+  if (props.beach_day !== undefined) {
     return (
       <div id='result-text'>
         {props.beach_day ? (
@@ -40,13 +48,13 @@ const Result = (props) => {
         <CurrentWeather weather={props.weather} />
       </div>
     );
-  } else if (props.vampire_weather) {
+  } else if (props.vampire_weather !== undefined) {
     return (
       <div id='result-text'>
         {props.vampire_weather ? (
           <VampireWeather location={props.location} />
         ) : (
-          <BadWeather location={props.location} />
+          <BadVampireWeather location={props.location} />
         )}
         <CurrentWeather weather={props.weather} />
       </div>

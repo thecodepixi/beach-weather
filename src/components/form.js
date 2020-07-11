@@ -111,7 +111,8 @@ export default class WeatherForm extends React.Component {
           <label htmlFor='vampire'>Are you a vampire? </label>
           <input
             type='checkbox'
-            value='true'
+            value={this.props.vampire}
+            checked={this.props.vampire}
             name='vampire'
             onChange={this.props.toggleVampireStatus}
           />
