@@ -23,6 +23,8 @@ export default class WeatherSearch extends React.Component {
       weather_code: '',
     },
     beach_day: undefined,
+    vampire: false,
+    vampire_weather: undefined,
   };
 
   submitLocation = (location) => {
@@ -40,21 +42,28 @@ export default class WeatherSearch extends React.Component {
   };
 
   determineBeachWeather = (weather) => {
-    let acceptableWeatherCodes = ['clear', 'mostly_clear', 'partly_cloudy'];
-    if (
-      weather.temp >= 75 &&
-      weather.temp <= 95 &&
-      weather.precipitation_type === 'none' &&
-      acceptableWeatherCodes.includes(weather.weather_code)
-    ) {
-      this.setState((prevState) => ({
-        ...prevState,
-        beach_day: true,
-      }));
+    if (!this.state.vampire) {
+      let acceptableWeatherCodes = ['clear', 'mostly_clear', 'partly_cloudy'];
+      if (
+        weather.temp >= 75 &&
+        weather.temp <= 95 &&
+        weather.precipitation_type === 'none' &&
+        acceptableWeatherCodes.includes(weather.weather_code)
+      ) {
+        this.setState((prevState) => ({
+          ...prevState,
+          beach_day: true,
+        }));
+      } else {
+        this.setState((prevState) => ({
+          ...prevState,
+          beach_day: false,
+        }));
+      }
     } else {
       this.setState((prevState) => ({
         ...prevState,
-        beach_day: false,
+        vampire_weather: true,
       }));
     }
   };
@@ -125,22 +134,37 @@ export default class WeatherSearch extends React.Component {
       .catch((err) => console.error(err));
   };
 
+  toggleVampireStatus = () => {
+    if (!this.state.vampire) {
+      this.setState((prevState) => ({
+        ...prevState,
+        vampire: true,
+      }));
+    } else {
+      this.setState((prevState) => ({
+        ...prevState,
+        vampire: false,
+      }));
+    }
+  };
+
   clearState = () => {
     this.setState({
       location: {
-        state: undefined,
-        city: undefined,
-        postal_code: undefined,
+        state: '',
+        city: '',
+        postal_code: '',
       },
-      lat: undefined,
-      lon: undefined,
+      lat: '',
+      lon: '',
       weather: {
-        temp: undefined,
-        precipitation_type: undefined,
-        weather_code: undefined,
+        temp: '',
+        precipitation_type: '',
+        weather_code: '',
       },
       beach_day: undefined,
-      reason: undefined,
+      vampire: false,
+      vampire_weather: undefined,
     });
   };
 
@@ -155,13 +179,16 @@ export default class WeatherSearch extends React.Component {
             getWeatherData={this.getWeatherData}
             submitLocation={this.submitLocation}
             clearState={this.clearState}
+            toggleVampireStatus={this.toggleVampireStatus}
           />
         </div>
 
         <div
           id='result'
           className={
-            this.state.beach_day === undefined || this.state.beach_day
+            this.state.beach_day === undefined && this.state.vampire
+              ? 'vampire'
+              : this.state.beach_day === undefined || this.state.beach_day
               ? 'good'
               : 'bad'
           }
@@ -170,6 +197,7 @@ export default class WeatherSearch extends React.Component {
             location={this.state.location}
             beach_day={this.state.beach_day}
             weather={this.state.weather}
+            vampire_weather={this.state.vampire_weather}
           />
         </div>
       </div>

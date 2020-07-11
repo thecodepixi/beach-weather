@@ -97,6 +97,13 @@ input {
   color: black;
 }
 
+.vampire {
+  background: url('./images/vampireweather.jpg') no-repeat;
+  background-size: cover;
+  resize: both;
+  color: black;
+}
+
 @media screen and (min-width: 850px) {
   #container {
     grid-template-columns: 25% auto;
