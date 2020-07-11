@@ -73,12 +73,6 @@ export default class WeatherSearch extends React.Component {
     })
       .then((resp) => resp.json())
       .then((data) => {
-        console.log(
-          'Data: ',
-          data[0].display_name.split(',')[
-            data[0].display_name.split(',').length - 5
-          ]
-        );
         // update state with latitude and longitude
         let cityName =
           this.state.location.city === ''
@@ -148,7 +142,6 @@ export default class WeatherSearch extends React.Component {
   };
 
   render() {
-    console.log(this.state.weather);
     return (
       <div id='container'>
         <div id='search'>
