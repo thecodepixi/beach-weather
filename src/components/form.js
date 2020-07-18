@@ -18,6 +18,7 @@ export default class WeatherForm extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
+    // check for empty fields. if all or empty OR the combo isn't city, state or state, zip: show the user an error
     if (
       this.state.city === '' &&
       this.state.state === '' &&
@@ -37,6 +38,7 @@ export default class WeatherForm extends React.Component {
         invalid_submission: true,
       }));
       return;
+      // valid submissions update state and use passed down submitLocation function
     } else {
       this.props.submitLocation(this.state);
       this.setState((prevState) => ({
@@ -47,6 +49,7 @@ export default class WeatherForm extends React.Component {
     }
   };
 
+  // function to reset submission and clear state
   resetSubmission = (e) => {
     e.preventDefault();
     this.setState((prevState) => ({

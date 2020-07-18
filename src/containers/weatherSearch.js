@@ -37,8 +37,80 @@ export default class WeatherSearch extends React.Component {
           postal_code: location.postal_code,
         },
       }),
-      () => this.getWeatherData(this.state.location)
+      // use setState callback to get latitude and longitude
+      () => this.getLatAndLon(this.state.location)
     );
+  };
+
+  getLatAndLon = (location) => {
+    //first get lat + lon from locIQ
+    let locationQueryString = `${
+      location.city !== '' ? '&city=' + location.city.split(' ').join('+') : ''
+    }${
+      location.state !== ''
+        ? '&state=' + location.state.split(' ').join('+')
+        : ''
+    }${
+      location.postal_code !== '' ? '&postalcode=' + location.postal_code : ''
+    }`;
+    fetch(`${locIQ_URL}${locationQueryString}&format=json`, {
+      'Content-type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+    })
+      .then((resp) => resp.json())
+      .then((data) => {
+        // update state with latitude and longitude
+        let cityName =
+          this.state.location.city === ''
+            ? data[0].display_name.split(',')[
+                data[0].display_name.split(',').length - 5
+              ]
+            : this.state.location.city;
+        this.setState(
+          (prevState) => ({
+            ...prevState,
+            location: {
+              ...prevState.location,
+              //if user provided a city name, leave it alone, if not replace with the city name from LocationIQ
+              city: cityName,
+            },
+            lat: data[0].lat,
+            lon: data[0].lon,
+          }),
+          // use setState callback to get weather data
+          () => this.getWeatherData()
+        );
+      })
+      .catch((err) => console.error(err));
+  };
+
+  getWeatherData = () => {
+    //get weather data from climcell
+    fetch(
+      CLIMACELL_URL +
+        `&lat=${this.state.lat}&lon=${this.state.lon}` +
+        CLIMACELL_FIELDS
+    )
+      .then((resp) => resp.json())
+      .then((data) => {
+        // update state with weather info
+        this.setState(
+          (prevState) => ({
+            ...prevState,
+            weather: {
+              temp: Math.ceil(Math.round(data.temp.value)),
+              feels_like: Math.ceil(Math.round(data.feels_like.value)),
+              precipitation_type: data.precipitation_type.value,
+              weather_code: data.weather_code.value,
+            },
+          }),
+          // use setState callback to determine beach weather
+          () => {
+            this.determineBeachWeather(this.state.weather);
+          }
+        );
+      })
+      .catch((err) => console.error(err));
   };
 
   determineBeachWeather = (weather) => {
@@ -86,72 +158,6 @@ export default class WeatherSearch extends React.Component {
         }));
       }
     }
-  };
-
-  getWeatherData = (location) => {
-    //first get lat + lon from locIQ
-    let locationQueryString = `${
-      location.city !== '' ? '&city=' + location.city.split(' ').join('+') : ''
-    }${
-      location.state !== ''
-        ? '&state=' + location.state.split(' ').join('+')
-        : ''
-    }${
-      location.postal_code !== '' ? '&postalcode=' + location.postal_code : ''
-    }`;
-    fetch(`${locIQ_URL}${locationQueryString}&format=json`, {
-      'Content-type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-    })
-      .then((resp) => resp.json())
-      .then((data) => {
-        // update state with latitude and longitude
-        let cityName =
-          this.state.location.city === ''
-            ? data[0].display_name.split(',')[
-                data[0].display_name.split(',').length - 5
-              ]
-            : this.state.location.city;
-        this.setState((prevState) => ({
-          ...prevState,
-          location: {
-            ...prevState.location,
-            //if user provided a city name, leave it alone, if not replace with the city name from LocationIQ
-            city: cityName,
-          },
-          lat: data[0].lat,
-          lon: data[0].lon,
-        }));
-      })
-      //get weather data from climcell
-      .then(() => {
-        fetch(
-          CLIMACELL_URL +
-            `&lat=${this.state.lat}&lon=${this.state.lon}` +
-            CLIMACELL_FIELDS
-        )
-          .then((resp) => resp.json())
-          .then((data) => {
-            // update state with weather info
-            this.setState(
-              (prevState) => ({
-                ...prevState,
-                weather: {
-                  temp: Math.ceil(Math.round(data.temp.value)),
-                  feels_like: Math.ceil(Math.round(data.feels_like.value)),
-                  precipitation_type: data.precipitation_type.value,
-                  weather_code: data.weather_code.value,
-                },
-              }),
-              // use setState callback to determine beach weather
-              () => {
-                this.determineBeachWeather(this.state.weather);
-              }
-            );
-          })
-          .catch((err) => console.error(err));
-      })
-      .catch((err) => console.error(err));
   };
 
   toggleVampireStatus = () => {
