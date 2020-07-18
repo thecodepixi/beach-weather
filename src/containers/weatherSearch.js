@@ -43,7 +43,7 @@ export default class WeatherSearch extends React.Component {
   };
 
   getLatAndLon = () => {
-    //first get lat + lon from locIQ
+    //format query string with location info
     let locationQueryString = '';
 
     locationQueryString +=
@@ -55,6 +55,7 @@ export default class WeatherSearch extends React.Component {
         ? this.state.location.postal_code
         : '';
 
+    //get lat, lng, and city from geocodeio
     fetch(
       `${GEOCODE_IO_URL}${locationQueryString}&api_key=${process.env.REACT_APP_GEOCODEIO}`,
       {
