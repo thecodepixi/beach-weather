@@ -24,19 +24,13 @@ export default class WeatherForm extends React.Component {
       this.state.state === '' &&
       this.state.postal_code === ''
     ) {
-      this.setState((prevState) => ({
-        ...prevState,
-        invalid_submission: true,
-      }));
+      this.tempSetInvalidSubmission();
       return;
     } else if (
       (this.state.state === '' && this.state.postal_code === '') ||
       (this.state.city === '' && this.state.state === '')
     ) {
-      this.setState((prevState) => ({
-        ...prevState,
-        invalid_submission: true,
-      }));
+      this.tempSetInvalidSubmission();
       return;
       // valid submissions update state and use passed down submitLocation function
     } else {
@@ -49,12 +43,28 @@ export default class WeatherForm extends React.Component {
     }
   };
 
+  // function to set invalid submission, but only for 5 seconds so that error will flash on screen
+  tempSetInvalidSubmission = () => {
+    this.setState((prevState) => ({
+      ...prevState,
+      invalid_submission: true,
+    }));
+
+    setTimeout(() => {
+      this.setState((prevState) => ({
+        ...prevState,
+        invalid_submission: false,
+      }));
+    }, 5000);
+  };
+
   // function to reset submission and clear state
   resetSubmission = (e) => {
     e.preventDefault();
     this.setState((prevState) => ({
       ...prevState,
       submitted: false,
+      invalid_submission: false,
       city: '',
       state: '',
       postal_code: '',
