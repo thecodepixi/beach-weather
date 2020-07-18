@@ -1,5 +1,6 @@
 import React from 'react';
-import CurrentWeather from './weatherDisplay';
+import BeachWeatherDisplay from './weatherDisplay';
+import VampireWeatherDisplay from './vampireWeatherDisplay';
 
 const GoodWeather = ({ location }) => {
   // Photo by Sean O. on Unsplash
@@ -45,7 +46,7 @@ const Result = (props) => {
         ) : (
           <BadWeather location={props.location} />
         )}
-        <CurrentWeather weather={props.weather} />
+        <BeachWeatherDisplay weather={props.weather} />
       </div>
     );
   } else if (props.vampire_weather !== undefined) {
@@ -56,7 +57,7 @@ const Result = (props) => {
         ) : (
           <BadVampireWeather location={props.location} />
         )}
-        <CurrentWeather weather={props.weather} />
+        <VampireWeatherDisplay weather={props.weather} />
       </div>
     );
   } else {

@@ -114,6 +114,7 @@ export default class WeatherSearch extends React.Component {
   };
 
   determineBeachWeather = (weather) => {
+    // if not vampire, check for beach weather
     if (!this.state.vampire) {
       let acceptableWeatherCodes = ['clear', 'mostly_clear', 'partly_cloudy'];
       if (
@@ -132,6 +133,7 @@ export default class WeatherSearch extends React.Component {
           beach_day: false,
         }));
       }
+      // otherwise check for vampire weather
     } else {
       let acceptableWeatherCodes = [
         'cloudy',
