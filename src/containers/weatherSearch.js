@@ -6,7 +6,7 @@ import Result from '../components/result';
 const CLIMACELL_URL = `https://api.climacell.co/v3/weather/realtime?apikey=${process.env.REACT_APP_CLIMACELL}`;
 const CLIMACELL_FIELDS =
   '&unit_system=us&fields=temp,weather_code,precipitation_type,feels_like';
-const locIQ_URL = `https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCIQ}&limit=1`;
+const GEOCODE_IO_URL = `https://api.geocod.io/v1.6/geocode?q=`;
 
 export default class WeatherSearch extends React.Component {
   state = {
@@ -42,40 +42,44 @@ export default class WeatherSearch extends React.Component {
     );
   };
 
-  getLatAndLon = (location) => {
+  getLatAndLon = () => {
     //first get lat + lon from locIQ
-    let locationQueryString = `${
-      location.city !== '' ? '&city=' + location.city.split(' ').join('+') : ''
-    }${
-      location.state !== ''
-        ? '&state=' + location.state.split(' ').join('+')
-        : ''
-    }${
-      location.postal_code !== '' ? '&postalcode=' + location.postal_code : ''
-    }`;
-    fetch(`${locIQ_URL}${locationQueryString}&format=json`, {
-      'Content-type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-    })
+    let locationQueryString = '';
+
+    locationQueryString +=
+      this.state.location.city !== '' ? this.state.location.city + '+' : '';
+    locationQueryString +=
+      this.state.location.state !== '' ? this.state.location.state + '+' : '';
+    locationQueryString +=
+      this.state.location.postal_code !== ''
+        ? this.state.location.postal_code
+        : '';
+
+    fetch(
+      `${GEOCODE_IO_URL}${locationQueryString}&api_key=${process.env.REACT_APP_GEOCODEIO}`,
+      {
+        'Content-type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+      }
+    )
       .then((resp) => resp.json())
       .then((data) => {
-        // update state with latitude and longitude
+        // get the city name from the data object if city was not specified (only state and zip)
+        let foundLocation = data.results[0];
         let cityName =
           this.state.location.city === ''
-            ? data[0].display_name.split(',')[
-                data[0].display_name.split(',').length - 5
-              ]
+            ? foundLocation.address_components.city
             : this.state.location.city;
+        // update state with cityName and lat/lon
         this.setState(
           (prevState) => ({
             ...prevState,
             location: {
               ...prevState.location,
-              //if user provided a city name, leave it alone, if not replace with the city name from LocationIQ
               city: cityName,
             },
-            lat: data[0].lat,
-            lon: data[0].lon,
+            lat: foundLocation.location.lat,
+            lon: foundLocation.location.lng,
           }),
           // use setState callback to get weather data
           () => this.getWeatherData()
